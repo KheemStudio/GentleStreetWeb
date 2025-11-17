@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gentle Street Vibes</title>
+    <style>
+        body { margin: 0; font-family: 'Poppins', sans-serif; background-color: #000; color: #fff; }
+        header { background-color: #111; padding: 20px; text-align: center; font-size: 2em; color: gold; }
+        section { padding: 60px 20px; text-align: center; }
+        .btn { background: gold; color: black; padding: 12px 24px; border: none; cursor: pointer; font-weight: bold; }
+        .btn:hover { background: #caa400; }
+        footer { background-color: #111; padding: 10px; text-align: center; font-size: 0.9em; color: #ccc; }
+        input, textarea { padding: 10px; width: 80%; margin: 8px 0; border-radius: 6px; border: none; }
+        .container { max-width: 800px; margin: 0 auto; }
+        a { color: gold; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <header>Gentle Street Vibes</header>
+    <section id="about">
+        <div class="container">
+            <h2>We craft premium cultural and diasporal experiences</h2>
+            <p>Gentle Street is a creative hub blending sound, art, and connection. Our world is powered by culture, innovation, and the rhythm of the streets.</p>
+            <p>Follow us: 
+                <a href="https://www.instagram.com/visualstudiovibes" target="_blank">Instagram</a> |
+                <a href="https://www.tiktok.com/@gentlestreetvibes" target="_blank">TikTok (New Account)</a> |
+                <a href="https://open.spotify.com/artist/7tQcTDyYwtXhZkvP4hLqOs" target="_blank">Spotify</a> |
+                <a href="https://audiomack.com/d-kheem" target="_blank">Audiomack</a>
+            </p>
+        </div>
+    </section>
+
+    <section id="fan-signup">
+        <div class="container">
+            <h2>Join the Fanlist</h2>
+            <form id="fanForm">
+                <input type="text" id="fanName" placeholder="Your Name" required><br>
+                <input type="email" id="fanEmail" placeholder="Your Email" required><br>
+                <button class="btn" type="submit">Sign Up</button>
+            </form>
+            <p id="fanMsg"></p>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <h2>Contact Gentle Street</h2>
+            <form id="contactForm">
+                <input type="text" id="name" placeholder="Your Name" required><br>
+                <input type="email" id="email" placeholder="Your Email" required><br>
+                <textarea id="message" rows="5" placeholder="Your Message" required></textarea><br>
+                <button class="btn" type="submit">Send Message</button>
+            </form>
+            <p>Email us directly at <a href="mailto:dhosterdkheem@gmail.com">dhosterdkheem@gmail.com</a></p>
+            <p id="contactMsg"></p>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 Gentle Street | Crafted by Visual Studio Vibes</p>
+    </footer>
+
+    <script type="module">
+        // Firebase Config
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "YOUR_FIREBASE_API_KEY",
+            authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
+            projectId: "YOUR_FIREBASE_PROJECT_ID",
+            storageBucket: "YOUR_FIREBASE_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_FIREBASE_SENDER_ID",
+            appId: "YOUR_FIREBASE_APP_ID"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Fan Signup
+        document.getElementById('fanForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('fanName').value;
+            const email = document.getElementById('fanEmail').value;
+            try {
+                await addDoc(collection(db, "fanlist"), { name, email });
+                document.getElementById('fanMsg').innerText = "Welcome to the Gentle Street fanlist!";
+            } catch (err) {
+                document.getElementById('fanMsg').innerText = "Error saving info.";
+            }
+        });
+
+        // Contact Form
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            try {
+                await addDoc(collection(db, "contacts"), { name, email, message });
+                document.getElementById('contactMsg').innerText = "Message sent successfully!";
+            } catch (err) {
+                document.getElementById('contactMsg').innerText = "Error sending message.";
+            }
+        });
+    </script>
+</body>
+</html>
